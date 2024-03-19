@@ -67,7 +67,7 @@ func main() {
 		os.Exit(1)
 	}
 
-	fmt.Fprintf(os.Stdout, "Started middleman server on port %s\nWaiting for the host to connect...\n", port)
+	fmt.Fprintf(os.Stdout, "Started middleman server on %s\nWaiting for the host to connect...\n", serverConn.Addr().String())
 
 serverInit:
 	host, err = serverConn.Accept()
@@ -81,6 +81,7 @@ serverInit:
 	host.Read(buf)
 	if !bytes.Contains(buf, wanted) {
 		fmt.Fprintf(os.Stderr, "Recieved a client instead of server.\n")
+		host.Close()
 		host = nil
 		goto serverInit
 	}
