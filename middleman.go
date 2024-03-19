@@ -81,7 +81,6 @@ serverInit:
 	host.Read(buf)
 	if !bytes.Contains(buf, wanted) {
 		fmt.Fprintf(os.Stderr, "Recieved a client instead of server.\n")
-		host.Close()
 		host = nil
 		goto serverInit
 	}
