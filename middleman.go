@@ -71,6 +71,7 @@ func main() {
 
 serverInit:
 	host, err = serverConn.Accept()
+accepted:
 	fmt.Fprintf(os.Stdout, "recieved connection from: %s\n", host.RemoteAddr().String())
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "An error occured when accepting a connection: %s\n", err.Error())
@@ -103,7 +104,7 @@ serverInit:
 		client.Read(buf)
 		if bytes.Contains(buf2, wanted2) {
 			host = client
-			continue
+			goto accepted
 		}
 		if !bytes.Contains(buf, wanted) {
 			fmt.Fprintf(os.Stderr, "Error: was expecting new client\n")
@@ -111,6 +112,7 @@ serverInit:
 			continue
 		}
 		client.Write([]byte("Ok"))
-		handleClient(client, host)
+		go handleClient(client, host)
+		goto serverInit
 	}
 }
