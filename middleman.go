@@ -98,7 +98,12 @@ serverInit:
 
 		buf = make([]byte, 100)
 		wanted = []byte("client")
+		buf2 := make([]byte, 100)
+		wanted2 := []byte("host")
 		client.Read(buf)
+		if bytes.Contains(buf2, wanted2) {
+			goto serverInit
+		}
 		if !bytes.Contains(buf, wanted) {
 			fmt.Fprintf(os.Stderr, "Error: was expecting new client\n")
 			client.Close()
